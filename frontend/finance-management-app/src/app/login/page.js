@@ -1,0 +1,64 @@
+"use client"
+import React from 'react'
+import Link from 'next/link'
+import Navbar from '../components/Navbar'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+const page = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const router = useRouter()
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async(e)=>{
+    e.preventDefault();
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    })
+
+    const data = await res.json();
+
+    if(res.ok){
+      localStorage.setItem("token", data.token)
+      router.push("/dashboard")
+    } else{
+      alert(data.message)
+    }
+  }
+
+  return (
+    <>
+      <Navbar/>
+      <form onSubmit={handleLogin} className='bg-purple-100 shadow-2xl mx-auto justify-center min-w-[40vw] min-h-[60vh] mt-30 rounded-4xl'>
+        <h1 className='text-4xl text-center font-semibold font-sans mt-7'>Login</h1>
+        <div className='text-2xl flex flex-col mx-auto gap-7 max-w-[30vw] mt-12'>
+          <label>Email</label>
+          <input type="email" placeholder='Enter email' onChange={(e)=> setEmail(e.target.value)} className='border-2 border-gray-400 hover:border-purple-400 focus:border-purple-600 outline-none focus:ring-1 focus:ring-purple-300 rounded-xl -mt-4' />
+          <label>Password</label>
+          <input type="password" placeholder='Enter password' onChange={(e)=> setPassword(e.target.value)} className='border-2 border-gray-400 hover:border-purple-400 focus:border-purple-600 outline-none focus:ring-1 focus:ring-purple-300 rounded-xl -mt-4' />
+        </div>
+        <div className='flex justify-center items-center mt-10'>
+          <button type='submit' className='text-xl h-14 w-28 rounded-4xl bg-purple-800 text-white hover:scale-105 transition'>Login</button>
+        </div>
+        <p className='flex gap-4 justify-center items-center mt-12 text-xl'>
+          Don't have an account?{' '}
+          <Link href="/signup" className="text-purple-700 font-medium hover:underline">
+            Sign Up
+          </Link>
+        </p>
+      </form>
+    </>
+  )
+}
+
+export default page
