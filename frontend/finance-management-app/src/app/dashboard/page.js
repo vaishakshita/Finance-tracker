@@ -43,7 +43,7 @@ const page = () => {
   //fetch transaction
   useEffect(() => {
     const fetchTransaction = async () => {
-      try{
+      try {
         const token = localStorage.getItem("token")
         const res = await fetch("http://localhost:5000/api/transactions", {
           headers: {
@@ -53,14 +53,14 @@ const page = () => {
 
         const data = await res.json();
         console.log("RAW DATA:", data);
-      console.log("TYPE:", typeof data);
-      console.log("IS ARRAY:", Array.isArray(data));
-      console.log("TRANSACTIONS FIELD:", data?.transactions);
+        console.log("TYPE:", typeof data);
+        console.log("IS ARRAY:", Array.isArray(data));
+        console.log("TRANSACTIONS FIELD:", data?.transactions);
         setTransactions(Array.isArray(data)
-    ? data
-    : Array.isArray(data?.transactions)
-    ? data.transactions
-    : [])
+          ? data
+          : Array.isArray(data?.transactions)
+            ? data.transactions
+            : [])
         setLastUpdated(new Date().toLocaleString())
       } catch (error) {
         console.log(error)
@@ -74,7 +74,7 @@ const page = () => {
   const income = safeTransactions.filter(t => t.type === "income").reduce((acc, t) => acc + t.amount, 0);
   const expense = safeTransactions.filter(t => t.type === "expense").reduce((acc, t) => acc + t.amount, 0);
   const savings = income - expense;
-  const recentTransactions = safeTransactions.slice(0, 3)
+  const recentTransactions = safeTransactions.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3)
 
   if (!Array.isArray(transactions)) {
     return <div>Loading or Invalid Data...</div>
@@ -166,13 +166,12 @@ const page = () => {
                 className="flex justify-between bg-indigo-100 border-2 border-indigo-400 shadow-2xl rounded-2xl p-4 mb-4">
                 <div>
                   <p className='text-xl font-sans font-semibold text-indigo-800'>{t.title}</p>
-                  <p className='text-slate-800 font-sans font-bold'>{t.category}</p>
+                  <p className='text-slate-800 font-sans font-semibold'>{t.category}</p>
                   <p>{t.date
                     ? new Date(t.date).toLocaleString("en-IN", {
                       day: "2-digit",
                       month: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
+                      year: "2-digit",
                     })
                     : "No date"}</p>
                 </div>

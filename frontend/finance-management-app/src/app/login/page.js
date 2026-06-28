@@ -36,21 +36,23 @@ const page = () => {
     }
   }
 
+  const inputDesign = "border-2 border-gray-400 hover:border-purple-400 focus:border-purple-600 outline-none focus:ring-1 focus:ring-purple-300 rounded-xl text-sm sm:text-xl";
+
   return (
     <>
       <Navbar/>
-      <form onSubmit={handleLogin} className='bg-purple-100 shadow-2xl mx-auto justify-center min-w-[40vw] min-h-[60vh] mt-30 rounded-4xl'>
-        <h1 className='text-4xl text-center font-semibold font-sans mt-7'>Login</h1>
-        <div className='text-2xl flex flex-col mx-auto gap-7 max-w-[30vw] mt-12'>
-          <label>Email</label>
-          <input type="email" placeholder='Enter email' onChange={(e)=> setEmail(e.target.value)} className='border-2 border-gray-400 hover:border-purple-400 focus:border-purple-600 outline-none focus:ring-1 focus:ring-purple-300 rounded-xl -mt-4' />
-          <label>Password</label>
-          <input type="password" placeholder='Enter password' onChange={(e)=> setPassword(e.target.value)} className='border-2 border-gray-400 hover:border-purple-400 focus:border-purple-600 outline-none focus:ring-1 focus:ring-purple-300 rounded-xl -mt-4' />
+      <form onSubmit={handleLogin} className='bg-purple-100 shadow-2xl mx-auto max-w-[80vw] my-15 md:my-30 rounded-4xl sm:max-w-[40vw]'>
+        <h1 className='text-4xl text-center font-semibold font-sans py-5'>Login</h1>
+        <div className='text-2xl flex flex-col mx-auto gap-4 max-w-[60vw] sm:max-w-[30vw] py-4'>
+          <label className='text-xl font-sans'>Email</label>
+          <input type="email" placeholder='Enter email' onChange={(e)=> setEmail(e.target.value)} className={inputDesign} />
+          <label className='text-xl font-sans'>Password</label>
+          <input type="password" placeholder='Enter password' onChange={(e)=> setPassword(e.target.value)} className={inputDesign} />
         </div>
-        <div className='flex justify-center items-center mt-10'>
+        <div className='flex justify-center items-center mt-7'>
           <button type='submit' className='text-xl h-14 w-28 rounded-4xl bg-purple-800 text-white hover:scale-105 transition'>Login</button>
         </div>
-        <p className='flex gap-4 justify-center items-center mt-12 text-xl'>
+        <p className='flex flex-col md:flex-row gap-3 justify-center items-center text-xl py-10 lg:text-2xl'>
           Don't have an account?{' '}
           <Link href="/signup" className="text-purple-700 font-medium hover:underline">
             Sign Up

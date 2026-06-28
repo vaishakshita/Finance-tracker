@@ -17,20 +17,20 @@ const Navbar = () => {
     }
 
     return (
-        <div>
-            <div className='bg-purple-400 flex justify-around px-20 py-5 items-center'>
+        <>
+            <div className='bg-purple-400 flex flex-col sm:flex-row items-center justify-around px-6 md:px-12 py-4 gap-4'>
                 <div className='flex gap-1'>
-                    <GiTakeMyMoney size={50} className='text' />
+                    <GiTakeMyMoney size={50} className='text-xl' />
                     <h1 className='font-semibold font-sans text-3xl py-2'>Montera</h1>
                 </div>
 
-                <div className='flex gap-8 font-sans'>
+                <div className='flex justify-center gap-4 font-sans'>
                     <button onClick={handleDashboard} className='bg-white rounded-3xl w-30 h-10 flex justify-center items-center text-purple-950 hover:bg-purple-300/30 transition cursor-pointer'>Dashboard</button>
                     <Link href="/login" className='bg-white rounded-3xl w-20 h-10 flex justify-center items-center text-purple-950 hover:bg-purple-300/50 transition cursor-pointer'>Login</Link>
                     <Link href="/signup" className='bg-white rounded-3xl w-20 h-10 flex justify-center items-center text-purple-950 hover:bg-purple-300/30 transition cursor-pointer'>Sign up</Link>
                 </div>
             </div>
-        </div>
+        </>
 
 
     )
