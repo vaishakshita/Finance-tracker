@@ -331,7 +331,7 @@ const page = () => {
         </div>
 
         {/* transactions */}
-        <div className='bg-white py-3 px-5 rounded-3xl mt-4 shadow-xl mx-auto max-h-[630px] overflow-y-auto'>
+        <div className='py-3 px-5 rounded-3xl mt-4 mx-auto max-h-[630px] overflow-y-auto'>
           {searchedTransactions.length === 0 ? (
             <p className='text-lg font-bold'>No transactions found</p>
           ) : (

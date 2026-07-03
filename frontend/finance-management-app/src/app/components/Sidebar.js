@@ -31,7 +31,7 @@ const Sidebar = () => {
     return (
         <>
 
-            <div className="bg-purple-400 fixed top-0 left-0 h-full text-center transform transition-transition duration-300 w-57 p-4">
+            <div className="bg-purple-400 fixed top-0 left-0 h-full text-center transform transition-transition duration-300 w-20 md:w-57 p-4">
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex flex-row fixed top-15">
                         <GiTakeMyMoney size={60}/>
