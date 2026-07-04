@@ -1,8 +1,9 @@
 "use client"
 import React from 'react'
 import Link from 'next/link'
-import { GiTakeMyMoney } from "react-icons/gi";
 import { useRouter } from 'next/navigation';
+import Image from "next/image";
+import logo from "@/app/assets/logo.png";
 
 const Navbar = () => {
     const router = useRouter()
@@ -20,8 +21,7 @@ const Navbar = () => {
         <>
             <div className='bg-purple-400 flex flex-col sm:flex-row items-center justify-around px-6 md:px-12 py-4 gap-4'>
                 <div className='flex gap-1'>
-                    <GiTakeMyMoney size={50} className='text-xl' />
-                    <h1 className='font-semibold font-sans text-3xl py-2'>Montera</h1>
+                    <Image src={logo} alt="Montera Logo" width={180} height={60} priority className="object-contain rounded-2xl"/>
                 </div>
 
                 <div className='flex justify-center gap-4 font-sans'>

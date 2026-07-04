@@ -2,7 +2,6 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import Sidebar from '@/app/components/Sidebar'
 import ProfileMenu from "@/app/components/ProfileMenu"
 
 
@@ -80,11 +79,11 @@ const page = () => {
     return <div>Loading or Invalid Data...</div>
   }
 
+  const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
+
   return (
     <>
-      <Sidebar />
-
-      <div>
+      <div className='ml-0 md:ml-10 py-3 px-5 md:p-2 max-w-6xl mx-auto'>
 
         {/* Top Bar */}
         <div className="flex justify-between items-center mb-6">
@@ -97,11 +96,11 @@ const page = () => {
         </div>
 
         {/* Cards */}
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 my-8 mx-30'>
-          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-green-700 h-50 w-70'>
+        <div className='grid grid-cols-1 sm:grid-cols-3 gap-10 lg:gap-4 mt-6'>
+          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-green-700 h-40 w-50 lg:w-60'>
             <h3 className='text-xl font-semibold font-sans text-slate-800'>Total Income</h3>
-            <p className='text-5xl text-green-700 font-bold font-sans'>₹{income}</p>
-            <p className="text-sm text-gray-500 mt-18">
+            <p className='text-4xl text-green-700 font-bold font-sans'>{formatCurrency(income)}</p>
+            <p className="text-xs lg:text-sm text-gray-500 mt-4">
               Updated: {latestTransaction?.date
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
@@ -113,10 +112,10 @@ const page = () => {
             </p>
           </div>
 
-          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-red-700 h-50 w-70'>
+          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-red-700 h-40 w-50 lg:w-60'>
             <h3 className='text-xl font-semibold font-sans text-slate-800'>Total Expense</h3>
-            <p className='text-5xl text-red-700 font-bold font-sans'>₹{expense}</p>
-            <p className="text-sm text-gray-500 mt-18">
+            <p className='text-4xl text-red-700 font-bold font-sans'>{formatCurrency(expense)}</p>
+            <p className="text-xs lg:text-sm text-gray-500 mt-4">
               Updated: {latestTransaction?.date
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
@@ -128,10 +127,10 @@ const page = () => {
             </p>
           </div>
 
-          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-orange-400 h-50 w-70'>
+          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-orange-400 h-40 w-50 lg:w-60'>
             <h3 className='text-xl font-semibold font-sans text-slate-800'>Total Savings</h3>
-            <p className='text-5xl text-orange-400 font-bold font-sans'>₹{savings}</p>
-            <p className="text-sm text-gray-500 mt-18">
+            <p className='text-4xl text-orange-400 font-bold font-sans'>{formatCurrency(savings)}</p>
+            <p className="text-xs lg:text-sm text-gray-500 mt-4">
               Updated: {latestTransaction?.date
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
@@ -147,7 +146,7 @@ const page = () => {
 
 
         {/* Transactions */}
-        <div>
+        <div className='my-4'>
 
           <h2 className='text-2xl text-blue-900 font-sans font-bold mb-4'>Recent Transactions</h2>
           <button
@@ -179,7 +178,7 @@ const page = () => {
                   t.type === "expense"
                     ? "text-red-500 font-semibold"
                     : "text-green-500 font-semibold"
-                }>{t.type === "expense" ? "-" : "+"} ₹{t.amount}</p>
+                }>{t.type === "expense" ? "-" : "+"} {formatCurrency(t.amount)}</p>
 
               </div>
             ))

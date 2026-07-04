@@ -46,7 +46,7 @@ const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
             <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3"/>
                 <XAxis dataKey="month"/>
-                <YAxis/>
+                <YAxis tickFormatter={formatCurrency}/>
                 <Tooltip formatter={formatCurrency}/>
                 <Legend/>
                 <Bar dataKey="expense" fill="#ef4444" radius={[6,6,0,0]}/>

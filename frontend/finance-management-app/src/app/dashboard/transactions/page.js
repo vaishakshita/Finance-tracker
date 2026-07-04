@@ -8,7 +8,6 @@ import { FiSearch } from "react-icons/fi";
 import { AiFillDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 
-import Sidebar from '@/app/components/Sidebar'
 import ProfileMenu from '@/app/components/ProfileMenu'
 import AddTransactionModal from '@/app/components/AddTransactionModal'
 import DeleteModal from '@/app/components/DeleteModal';
@@ -274,11 +273,10 @@ const page = () => {
 
   // console.log("STATE transactions:", transactions);
   // console.log("IS ARRAY STATE:", Array.isArray(transactions));
+  const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
 
   return (
     <>
-      <Sidebar className="hidden md:block" />
-
       <div className='ml-0 md:ml-10 py-3 px-5 md:p-2 max-w-6xl mx-auto'>
         {/* topsection */}
         <div className='flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto'>
@@ -301,7 +299,7 @@ const page = () => {
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6'>
           <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-green-700 opacity-80 xl:w-1/2'>
             <h3 className='text-lg font-semibold font-sans text-slate-800'>Total Income</h3>
-            <p className='text-2xl md:text-3xl text-green-700 font-bold font-sans'>₹{income}</p>
+            <p className='text-2xl md:text-3xl text-green-700 font-bold font-sans'>{formatCurrency(income)}</p>
             <p className="text-sm text-gray-500">
               Updated: {latestTransaction?.date
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
@@ -316,7 +314,7 @@ const page = () => {
 
           <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-red-700 opacity-80 xl:w-1/2'>
             <h3 className='text-lg font-semibold font-sans text-slate-800'>Total Expense</h3>
-            <p className='text-2xl md:text-3xl text-red-700 font-bold font-sans'>₹{expense}</p>
+            <p className='text-2xl md:text-3xl text-red-700 font-bold font-sans'>{formatCurrency(expense)}</p>
             <p className="text-sm text-gray-500">
               Updated: {latestTransaction?.date
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
@@ -365,7 +363,7 @@ const page = () => {
                   t.type === "expense"
                     ? "text-red-500 font-semibold text-xs lg:text-lg"
                     : "text-green-500 font-semibold text-xs lg:text-lg"
-                }>{t.type === "expense" ? "-" : "+"} ₹{t.amount} </p>
+                }>{t.type === "expense" ? "-" : "+"} {formatCurrency(t.amount)} </p>
               </div>
 
             ))

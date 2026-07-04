@@ -60,18 +60,21 @@ const ExpensePieChart = ({ transactions }) => {
     }
 
     return (
-        <div className="bg-white rounded-3xl shadow-xl p-5 h-[420px]">
-            <h2 className="text-xl font-bold mb-5">Expense by Category</h2>
-            <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} className="border-2 border-indigo-800 bg-blue-100 rounded-lg px-3 py-2">
+        <div className="bg-white rounded-3xl shadow-xl p-5">
+            <div className="flex flex-row gap-5">
+                <h2 className="text-xl font-bold mb-5">Expense by Category</h2>
+            <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} className="border-2 border-indigo-800 bg-blue-100 rounded-lg p-3 -mt-2">
                 <option value="All">All Time</option>
                 {monthNames.map((month) => (
                     <option key={month} value={month}>{month}</option>
                 ))}
             </select>
-            {chartData.length === 0 ? (<div className="flex items-center justify-center h-[300px] text-gray-500">No expense data for {selectedMonth}</div>) : (
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            </div>
+
+                {chartData.length === 0 ? (<div className="flex items-center justify-center h-[300px] text-gray-500">No expense data for {selectedMonth}</div>) : (
+                <div className="flex flex-col xl:mt-5 xl:flex-row items-center justify-between gap-8">
                     <div className="w-full lg:w-[55%] h-[320px]">
-                        <ResponsiveContainer width="100%" height="85%">
+                        <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie data={chartData}
                                     dataKey="value"
@@ -95,7 +98,7 @@ const ExpensePieChart = ({ transactions }) => {
                                     ))}
                                 </Pie>
                                 <text
-                                    x="32%"
+                                    x="50%"
                                     y="47%"
                                     textAnchor="middle"
                                     dominantBaseline="middle"
@@ -106,7 +109,7 @@ const ExpensePieChart = ({ transactions }) => {
                                 </text>
 
                                 <text
-                                    x="31%"
+                                    x="50%"
                                     y="54%"
                                     textAnchor="middle"
                                     dominantBaseline="middle"
@@ -119,67 +122,35 @@ const ExpensePieChart = ({ transactions }) => {
                                     borderRadius: "12px",
                                     border: "1px solid #ddd",
                                     boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
-                                }} formatter={()=>{
-                                    <div className="text-right">
-
-                                        <p className="font-semibold">
-
-                                            ₹{item.value.toLocaleString("en-IN")}
-
-                                        </p>
-
-                                        <p className="text-sm text-gray-500">
-
-                                            {((item.value / totalExpense) * 100).toFixed(1)}%
-
-                                        </p>
-
-                                    </div>
+                                }} formatter={(value) => {
+                                    const percentage = ((value / totalExpense) * 100).toFixed(1);
+                                    return `₹${value.toLocaleString("en-IN")} (${percentage}%)`;
                                 }} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <div className="w-full lg:w-[45%]">
-                        <div className="space-y-4">
-
+                    <div className="bg-white w-full lg:w-[45%] space-y-2">
                             {chartData.map((item, index) => (
-
-                                <div
-                                    key={item.name}
-                                    className="flex items-center justify-between"
-                                >
-
+                                <div key={item.name} className="flex items-center gap-4">
                                     <div className="flex items-center gap-3">
-
-                                        <div
-                                            className="w-3 h-3 rounded-full"
-                                            style={{
-                                                backgroundColor: COLORS[index % COLORS.length]
-                                            }}
-                                        />
-
-                                        <span className="text-gray-700">
-                                            {item.name}
-                                        </span>
-
+                                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                                        <span className="text-gray-700">{item.name}</span>
                                     </div>
-
-                                    <span className="font-semibold">
-
-                                        ₹{item.value.toLocaleString("en-IN")}
-
-                                    </span>
-
+                                    <div className="ml-auto text-right">
+                                        <p className="font-semibold">
+                                            ₹{item.value.toLocaleString("en-IN")}
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            {((item.value / totalExpense) * 100).toFixed(1)}%
+                                        </p>
+                                    </div>
                                 </div>
-
                             ))}
-
-                        </div>
                     </div>
                 </div>
-
-
             )}
+            
+            
         </div>
     )
 }

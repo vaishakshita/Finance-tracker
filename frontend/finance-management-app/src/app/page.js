@@ -1,11 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import landingPage from "@/app/assets/landingPage.png"
 import Navbar from "./components/Navbar";
 export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between min-h-screen px-16 md:px-10 lg:px-16 py-10">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-around min-h-screen px-16 md:px-10 lg:px-16 py-10 lg:-mt-20">
         <div className="max-w-xl my-20 md:my-40 lg:">
           <h1 className="text-5xl sm:text-6xl lg:text-8xl font-sans text-purple-950 font-semibold">Take Control</h1>
           <h1 className="text-5xl sm:text-6xl lg:text-8xl font-sans text-purple-950 font-semibold">of Your</h1>
@@ -29,15 +30,14 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <img src="https://img.magnific.com/free-photo/finance-business-accounting-analysis-management-concept_53876-15817.jpg?semt=ais_hybrid&w=740&q=80" className="w-full lg:w-[600px] rounded-2xl shadow-lg opacity-80" />
+          <Image
+            src={landingPage}
+            width={400}
+            height={400}
+            alt="Finance Dashboard"
+            className="w-full max-w-xl rounded-4xl shadow-lg lg:w-[500]"
+          />
         </div>
-        {/* <Image
-    src="https://img.magnific.com/free-photo/finance-business-accounting-analysis-management-concept_53876-15817.jpg?semt=ais_hybrid&w=740&q=80"
-    width={600}
-    height={500}
-    alt="Finance Dashboard"
-    className="w-full max-w-xl rounded-2xl shadow-lg"
-/> */}
       </div>
 
     </>

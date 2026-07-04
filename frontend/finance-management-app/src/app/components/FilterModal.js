@@ -6,7 +6,7 @@ const FilterModal = ({ showFilter, setShowFilter, cardFilters, setCardFilters, a
     const modalDesign = "w-full border-2 border-blue-300 rounded-lg p-1 mb-4"
     return (
         <>
-            <div className='fixed inset-0 bg-black/40 flex justify-center items-center z-50'>
+            <div className='fixed p-10 inset-0 bg-black/40 flex justify-center items-center z-50'>
                 <div className='bg-white rounded-xl shadow-xl w-[450px] p-6'>
                     <h2 className='flex justify-center text-xl font-bold font-sans text-blue-800'>Filter Transaction</h2>
 

@@ -47,7 +47,7 @@ const ExpenseLineChart = ({ transactions }) => {
   const chartData = Object.values(monthlyData);
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg p-6 w-full h-[420px]">
+    <div className="bg-white rounded-3xl shadow-lg p-6 w-full h-[430px]">
 
       <h2 className="text-2xl font-bold mb-6">
         Monthly Expense Trend
