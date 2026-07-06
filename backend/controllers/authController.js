@@ -55,7 +55,7 @@ const loginUser = async(req, res)=>{
         const token = jwt.sign(
             {id: user._id},
             "secretkey",
-            {expiresIn: "1d"}
+            {expiresIn: "7d"}
         )
 
         //user registered successfully

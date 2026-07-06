@@ -48,7 +48,7 @@ const Sidebar = () => {
             )}
             <div className="hidden md:block bg-purple-400 fixed top-0 left-0 h-full text-center transform transition-transition duration-300 w-20 lg:w-55 p-4">
                 <div className="flex items-center justify-center mb-6 -mt-9">
-                    <div className="flex items-center px-2 py-2 rounded-4xl mt-8">
+                    <div className="flex items-center px-2 py-2 rounded-4xl mt-10">
                         <Image
                             src={logo}
                             alt="Montera Logo"
