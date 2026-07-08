@@ -108,7 +108,7 @@ Finance-tracker/
 |    ├─package.json
 |    └─next.config.mjs
 | 
-├─Screenshots/
+├─screenshots/
 └─README.md
 
 ```

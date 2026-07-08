@@ -9,9 +9,9 @@ import { AiFillDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 
 import ProfileMenu from '@/app/components/ProfileMenu'
-import AddTransactionModal from '@/app/components/AddTransactionModal'
-import DeleteModal from '@/app/components/DeleteModal';
-import FilterModal from '@/app/components/FilterModal'
+import AddTransactionModal from '@/app/dashboard/transactions/components/AddTransactionModal'
+import DeleteModal from '@/app/dashboard/transactions/components/DeleteModal';
+import FilterModal from '@/app/dashboard/transactions/components/FilterModal'
 import toast from 'react-hot-toast';
 
 

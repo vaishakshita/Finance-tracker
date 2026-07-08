@@ -7,7 +7,7 @@ import { FiLogOut } from "react-icons/fi";
 
 import { BiHome } from "react-icons/bi";
 import { SiSimpleanalytics } from "react-icons/si";
-import { GoGoal } from "react-icons/go";
+import { FaSitemap } from "react-icons/fa";
 import { GrTransaction } from "react-icons/gr";
 
 const BottomNavbar = () => {
@@ -37,9 +37,9 @@ const BottomNavbar = () => {
             icon: <SiSimpleanalytics size={24} />
         },
         {
-            name: "Goals",
-            path: "/dashboard/goals",
-            icon: <GoGoal size={24} />
+            name: "Planner",
+            path: "/dashboard/planner",
+            icon: <FaSitemap size={24} />
         }
     ];
 

@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, useEffect } from 'react'
-import ExpensePieChart from "@/app/components/ExpensePieChart";
-import IncomeExpenseChart from '@/app/components/IncomeExpenseChart';
-import ExpenseLineChart from '@/app/components/ExpenseLineChart';
-import FinancialInsights from '@/app/components/FinancialInsights';
+import ExpensePieChart from "@/app/dashboard/analytics/components/ExpensePieChart";
+import IncomeExpenseChart from '@/app/dashboard/analytics/components/IncomeExpenseChart';
+import ExpenseLineChart from '@/app/dashboard/analytics/components/ExpenseLineChart';
+import FinancialInsights from '@/app/dashboard/analytics/components/FinancialInsights';
 
 const page = () => {
   const [transactions, setTransactions] = useState([])

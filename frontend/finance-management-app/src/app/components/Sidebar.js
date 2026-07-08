@@ -6,7 +6,7 @@ import { useState } from "react";
 //import icons
 import { SiSimpleanalytics } from "react-icons/si";
 import { BiHome } from "react-icons/bi";
-import { GoGoal } from "react-icons/go";
+import { FaSitemap } from "react-icons/fa";
 import { GrTransaction } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
 
@@ -29,7 +29,7 @@ const Sidebar = () => {
         { name: "Home", path: "/dashboard", icon: <BiHome size={60} /> },
         { name: "Transactions", path: "/dashboard/transactions", icon: <GrTransaction size={60} /> },
         { name: "Analytics", path: "/dashboard/analytics", icon: <SiSimpleanalytics size={56} /> },
-        { name: "Goals", path: "/dashboard/goals", icon: <GoGoal size={60} /> },
+        { name: "Planner", path: "/dashboard/planner", icon: <FaSitemap size={60} /> },
     ]
 
     return (
