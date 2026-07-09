@@ -112,6 +112,9 @@ exports.addSavings = async (req, res) => {
         }
 
         goal.savedAmount += Number(amount);
+        if (goal.savedAmount > goal.targetAmount) {
+            goal.savedAmount = goal.targetAmount;
+        }
         await goal.save();
         res.json(goal);
     } catch (error) {
