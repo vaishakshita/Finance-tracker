@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation'
 
 import { FaFilter } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { AiFillDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
+import { FaPlusCircle } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 import ProfileMenu from '@/app/components/ProfileMenu'
+import EmptyTransaction from './components/EmptyTransaction';
 import AddTransactionModal from '@/app/dashboard/transactions/components/AddTransactionModal'
 import DeleteModal from '@/app/dashboard/transactions/components/DeleteModal';
 import FilterModal from '@/app/dashboard/transactions/components/FilterModal'
@@ -86,10 +88,6 @@ const page = () => {
       })
 
       const data = await res.json()
-      // console.log("RAW DATA:", data);
-      // console.log("TYPE:", typeof data);
-      // console.log("IS ARRAY:", Array.isArray(data));
-      // console.log("TRANSACTIONS FIELD:", data?.transactions);
       const fetchedTransactions = Array.isArray(data)
         ? data
         : Array.isArray(data?.transactions)
@@ -172,18 +170,18 @@ const page = () => {
   }
 
   //delete transaction
-  const handleDeleteTransaction = async()=>{
-    try{
+  const handleDeleteTransaction = async () => {
+    try {
       const token = localStorage.getItem("token")
-      const res = await fetch(`http://localhost:5000/api/transactions/${selectedTransaction._id}`,{
+      const res = await fetch(`http://localhost:5000/api/transactions/${selectedTransaction._id}`, {
         method: "DELETE",
-        headers:{
+        headers: {
           Authorization: `Bearer ${token}`
         }
       })
 
       const data = await res.json()
-      if(res.ok){
+      if (res.ok) {
         toast.success("Transaction deleted successfully")
         setShowDeleteModal(false);
         setSelectedTransaction(null);
@@ -191,7 +189,7 @@ const page = () => {
       } else {
         toast.error(data.message)
       }
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   }
@@ -271,8 +269,7 @@ const page = () => {
     t.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  // console.log("STATE transactions:", transactions);
-  // console.log("IS ARRAY STATE:", Array.isArray(transactions));
+
   const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
 
   return (
@@ -282,22 +279,26 @@ const page = () => {
         <div className='flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto'>
           <h1 className='text-2xl md:text-3xl font-bold font-sans text-purple-800'>TRANSACTIONS</h1>
 
-          <div className='flex gap-4 p-4'>
-            <button onClick={handleAdd} className='bg-white text-purple-800 border-2 border-purple-700 text-sm p-1 rounded-xl font-sans font-semibold'>+ Add Transaction</button>
-            <button className='rounded-lg px-4 py-2 bg-purple-800 text-white transition' onClick={() => setShowFilter(true)}><FaFilter size={15} /></button>
-            <ProfileMenu user={user} />
-          </div>
+          {transactions.length !== 0 &&
+            <div className='flex gap-4 p-4'>
+              <button onClick={handleAdd} className='flex items-center gap-2 bg-white text-purple-800 border-2 border-purple-700 text-sm p-1 rounded-xl font-sans font-semibold'><FaPlusCircle size={20} /> Add Transaction</button>
+              <button className='rounded-lg px-4 py-2 bg-purple-800 text-white transition' onClick={() => setShowFilter(true)}><FaFilter size={15} /></button>
+              <ProfileMenu user={user} />
+            </div>
+          }
+
         </div>
 
         {/* search */}
-        <div className='relative w-full max-w-sm'>
+        {transactions.length !== 0 && <div className='relative w-full max-w-sm mx-auto md:ml-0'>
           <input type="text" placeholder='Search transaction...' value={search} onChange={(e) => setSearch(e.target.value)} className='w-full border-2 border-blue-400 rounded-xl py-2 pl-4 pr-10 outline-none focus:border-blue-600' />
           <FiSearch size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600" />
-        </div>
+        </div>}
+
 
         {/* income/expense cards */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6'>
-          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-green-700 opacity-80 xl:w-1/2'>
+        <div className='flex flex-col sm:flex-row gap-10 relative mx-auto mt-6'>
+          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-green-700 opacity-80'>
             <h3 className='text-lg font-semibold font-sans text-slate-800'>Total Income</h3>
             <p className='text-2xl md:text-3xl text-green-700 font-bold font-sans'>{formatCurrency(income)}</p>
             <p className="text-sm text-gray-500">
@@ -305,14 +306,13 @@ const page = () => {
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
                   month: "short",
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  year: "2-digit"
                 })
-                : "No data"}
+                : "No Transactions yet"}
             </p>
           </div>
 
-          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-red-700 opacity-80 xl:w-1/2'>
+          <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-red-700 opacity-80'>
             <h3 className='text-lg font-semibold font-sans text-slate-800'>Total Expense</h3>
             <p className='text-2xl md:text-3xl text-red-700 font-bold font-sans'>{formatCurrency(expense)}</p>
             <p className="text-sm text-gray-500">
@@ -320,63 +320,69 @@ const page = () => {
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
                   month: "short",
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  year: "2-digit"
                 })
-                : "No data"}
+                : "No Transactions yet"}
             </p>
           </div>
         </div>
 
         {/* transactions */}
-        <div className='py-3 px-5 rounded-3xl mt-4 mx-auto max-h-[630px] overflow-y-auto'>
-          {searchedTransactions.length === 0 ? (
-            <p className='text-lg font-bold'>No transactions found</p>
-          ) : (
-            searchedTransactions.map((t) => (
-              <div
-                key={t._id}
-                className="flex justify-between items-center bg-indigo-100 border-2 border-indigo-400 shadow-2xl rounded-2xl p-4 mb-4">
-                <div>
-                  <p className='text-lg font-sans font-semibold text-indigo-800'>{t.title}</p>
-                  <p className='text-slate-700 text-sm font-medium font-sans'>{t.category}</p>
-                  <p className="text-sm text-gray-600">{t.date
-                    ? new Date(t.date).toLocaleString("en-IN", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "2-digit",
-                    })
-                    : "No date"}
-                  </p>
-                  {/* buttons */}
-                  <div className='flex gap-2'>
-                    <button onClick={() => handleEdit(t)} className='p-1 border-slate-700 border-2 rounded-2xl bg-blue-500'>
-                      <MdEdit className="text-white hover:text-blue-800 hover:bg-white text-sm" />
-                    </button>
-                    <button onClick={()=>{setSelectedTransaction(t); setShowDeleteModal(true)}} className='p-1 rounded-2xl border-slate-700 border-2 bg-red-500'>
-                      <AiFillDelete className="text-white hover:text-red-800 hover:bg-white text-sm" />
-                    </button>
+        {transactions.length === 0 ? (
+
+          <EmptyTransaction onAdd={handleAdd} />
+
+        ) : (
+          <div className='py-3 px-5 rounded-3xl mt-4 mx-auto max-h-[630px] overflow-y-auto'>
+            {searchedTransactions.length === 0 ? (
+              <p className='text-lg font-bold'>No transactions found</p>
+            ) : (
+              searchedTransactions.map((t) => (
+                <div
+                  key={t._id}
+                  className="flex justify-between items-center bg-indigo-100 border-2 border-indigo-400 shadow-xl rounded-2xl p-4 mb-4">
+                  <div>
+                    <p className='text-lg font-sans font-semibold text-indigo-800'>{t.title}</p>
+                    <p className='text-slate-700 text-sm font-medium font-sans'>{t.category}</p>
+                    <p className="text-sm text-gray-600">{t.date
+                      ? new Date(t.date).toLocaleString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "2-digit",
+                      })
+                      : "No date"}
+                    </p>
+                    {/* buttons */}
+                    <div className='flex gap-3 mt-3'>
+                      <button onClick={() => handleEdit(t)} className='rounded-lg bg-purple-700 p-2 text-purple-600 hover:bg-purple-800 transition'>
+                        <MdEdit className="text-white" />
+                      </button>
+                      <button onClick={() => { setSelectedTransaction(t); setShowDeleteModal(true) }} className='rounded-lg bg-purple-700 p-2 text-white hover:bg-purple-800 transition'>
+                        <RiDeleteBin6Line className="text-white" />
+                      </button>
+                    </div>
                   </div>
+
+                  <p className={
+                    t.type === "expense"
+                      ? "text-red-500 font-semibold text-sm lg:text-lg"
+                      : "text-green-500 font-semibold text-sm lg:text-lg"
+                  }>{t.type === "expense" ? "-" : "+"} {formatCurrency(t.amount)} </p>
                 </div>
 
-                <p className={
-                  t.type === "expense"
-                    ? "text-red-500 font-semibold text-xs lg:text-lg"
-                    : "text-green-500 font-semibold text-xs lg:text-lg"
-                }>{t.type === "expense" ? "-" : "+"} {formatCurrency(t.amount)} </p>
-              </div>
-
-            ))
-          )}
-        </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* Modal form */}
-      <AddTransactionModal showModal={showModal} setShowModal={setShowModal} formData={formData} setFormData={setFormData} handleAddTransaction={handleAddTransaction} handleAdd={handleAdd} isEditing={isEditing} selectedTransaction={selectedTransaction} />
+
+      <AddTransactionModal transactions={transactions} showModal={showModal} setShowModal={setShowModal} formData={formData} setFormData={setFormData} handleAddTransaction={handleAddTransaction} handleAdd={handleAdd} isEditing={isEditing} selectedTransaction={selectedTransaction} />
 
       <FilterModal showFilter={showFilter} setShowFilter={setShowFilter} cardFilters={cardFilters} setCardFilters={setCardFilters} applyFilters={applyFilters} />
 
-      <DeleteModal showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} handleDeleteTransaction={handleDeleteTransaction}/>
+      <DeleteModal showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} handleDeleteTransaction={handleDeleteTransaction} />
     </>
   )
 }

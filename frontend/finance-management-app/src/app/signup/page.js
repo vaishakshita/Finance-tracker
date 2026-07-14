@@ -5,12 +5,15 @@ import Navbar from '../components/Navbar'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { FiEye, FiEyeOff } from "react-icons/fi"
 
 const page = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmpassword, setConfirmpassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const router = useRouter()
 
   const handleSignup = async (e) => {
@@ -46,17 +49,28 @@ const page = () => {
   return (
     <>
       <Navbar />
-      <form onSubmit={handleSignup} className='bg-purple-100 shadow-2xl mx-auto justify-center max-w-[80vw] my-15 md:my-30 rounded-4xl sm:w-1/2'>
+      <form onSubmit={handleSignup} className='bg-purple-100 shadow-2xl mx-auto justify-center max-w-[80vw] mt-15 mb-6 rounded-4xl sm:w-1/2'>
         <h1 className='text-4xl text-center font-semibold font-sans py-5'>Sign up</h1>
         <div className='text-2xl flex flex-col mx-auto gap-4 max-w-[60vw] sm:max-w-[30vw] py-4'>
           <label className="text-xl font-sans">Full Name</label>
           <input onChange={(e) => setName(e.target.value)} type="text" className={inputDesign} />
+
           <label className="text-xl font-sans">Email</label>
           <input onChange={(e) => setEmail(e.target.value)} type="email" className={inputDesign} />
-          <label className="text-xl font-sans">Enter Password</label>
-          <input onChange={(e) => setPassword(e.target.value)} type="password" className={inputDesign} />
+
+          <label className="text-xl font-sans">Create Password</label>
+          <div className='relative w-full'>
+            <input onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} className={`${inputDesign} w-full pr-12`} />
+            <button type='button' onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 mt-1 md:mt-0 text-gray-500 hover:text-purple-700">{showPassword ? <FiEyeOff size={22} /> : <FiEye size={22} />}</button>
+          </div>
+
+
           <label className="text-xl font-sans">Confirm Password</label>
-          <input onChange={(e) => setConfirmpassword(e.target.value)} type="password" className={inputDesign} />
+          <div className='relative w-full'>
+            <input onChange={(e) => setConfirmpassword(e.target.value)} type={showConfirmPassword ? "text" : "password"} className={`${inputDesign} w-full pr-12`} />
+            <button type='button' onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 mt-1 md:mt-0 text-gray-500 hover:text-purple-700">{showConfirmPassword ? <FiEyeOff size={22} /> : <FiEye size={22} />}</button>
+          </div>
+
         </div>
         <div className='flex justify-center items-center mt-7'>
           <button type='submit' className='text-xl h-14 w-28 rounded-4xl bg-purple-800 text-white hover:scale-105 transition'>Sign up</button>

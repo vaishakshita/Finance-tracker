@@ -84,8 +84,9 @@ const BudgetOverview = ({ budgets }) => {
 
             <hr className="my-6" />
             <h3 className="font-semibold text-lg mb-4">Budget Alerts</h3>
+            
 
-            {alerts.length === 0 ? (
+            {alerts.length === 0 && totalBudget !== 0 ? (
                 <p className="text-green-600 text-sm">🎉Great job! All budgets are on track</p>
             ) : (
                 alerts.map((budget) => (

@@ -4,17 +4,16 @@ import Link from 'next/link'
 import Navbar from '../components/Navbar'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { FiEye, FiEyeOff } from "react-icons/fi"
 import toast from 'react-hot-toast'
 
 const page = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async(e)=>{
+  const handleLogin = async (e) => {
     e.preventDefault();
     const res = await fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
@@ -29,11 +28,11 @@ const page = () => {
 
     const data = await res.json();
 
-    if(res.ok){
+    if (res.ok) {
       localStorage.setItem("token", data.token)
       router.push("/dashboard")
       toast.success("Login Successful");
-    } else{
+    } else {
       toast.error(data.message)
     }
   }
@@ -42,14 +41,17 @@ const page = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <form onSubmit={handleLogin} className='bg-purple-100 shadow-2xl mx-auto max-w-[80vw] my-15 md:my-30 rounded-4xl sm:max-w-[40vw]'>
         <h1 className='text-4xl text-center font-semibold font-sans py-5'>Login</h1>
         <div className='text-2xl flex flex-col mx-auto gap-4 max-w-[60vw] sm:max-w-[30vw] py-4'>
           <label className='text-xl font-sans'>Email</label>
-          <input type="email" placeholder='Enter email' onChange={(e)=> setEmail(e.target.value)} className={inputDesign} />
+          <input type="email" placeholder='Enter email' onChange={(e) => setEmail(e.target.value)} className={inputDesign} />
           <label className='text-xl font-sans'>Password</label>
-          <input type="password" placeholder='Enter password' onChange={(e)=> setPassword(e.target.value)} className={inputDesign} />
+          <div className='relative w-full'>
+            <input placeholder='Enter password' onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} className={`${inputDesign} w-full pr-12`} />
+            <button type='button' onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-700">{showPassword ? <FiEyeOff size={22} /> : <FiEye size={22} />}</button>
+          </div>
         </div>
         <div className='flex justify-center items-center mt-7'>
           <button type='submit' className='text-xl h-14 w-28 rounded-4xl bg-purple-800 text-white hover:scale-105 transition'>Login</button>

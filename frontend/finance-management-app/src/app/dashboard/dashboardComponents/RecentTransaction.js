@@ -1,6 +1,9 @@
+"use client"
 import React from 'react'
+import { useRouter } from 'next/navigation';
 
 const RecentTransaction = ({transactions}) => {
+    const router = useRouter()
     const safeTransactions = Array.isArray(transactions) ? transactions : [];
     const recentTransactions = safeTransactions.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3)
     const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
@@ -21,7 +24,7 @@ const RecentTransaction = ({transactions}) => {
               recentTransactions.map((t) => (
                 <div
                   key={t._id}
-                  className="flex justify-between bg-indigo-100 border-2 border-indigo-400 shadow-2xl rounded-2xl px-4 py-2 mb-4">
+                  className="flex justify-between bg-indigo-100 border-2 border-indigo-400 shadow-2xl rounded-2xl px-4 py-3 mt-3 mb-6">
                   <div>
                     <p className='text-xl font-sans font-semibold text-indigo-800'>{t.title}</p>
                     <p className='text-slate-800 font-sans font-semibold'>{t.category}</p>

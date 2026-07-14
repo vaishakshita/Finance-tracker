@@ -14,7 +14,7 @@ const SummaryCards = ({transactions}) => {
   const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
   return (
     <div>
-      <div className='grid grid-cols-1 sm:grid-cols-3 gap-10 lg:gap-4 mt-6'>
+      <div className='flex flex-col sm:flex-row gap-10 lg:gap-20 mt-6'>
           <div className='bg-white p-4 rounded-xl shadow-xl border-4 border-green-700 h-40 w-50 lg:w-60'>
             <h3 className='text-xl font-semibold font-sans text-slate-800'>Total Income</h3>
             <p className='text-4xl text-green-700 font-bold font-sans'>{formatCurrency(income)}</p>
@@ -23,8 +23,7 @@ const SummaryCards = ({transactions}) => {
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
                   month: "short",
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  year: "2-digit",
                 })
                 : "No data"}
             </p>
@@ -38,8 +37,7 @@ const SummaryCards = ({transactions}) => {
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
                   month: "short",
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  year: "2-digit",
                 })
                 : "No data"}
             </p>
@@ -53,8 +51,7 @@ const SummaryCards = ({transactions}) => {
                 ? new Date(latestTransaction.date).toLocaleString("en-IN", {
                   day: "2-digit",
                   month: "short",
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  year: "2-digit",
                 })
                 : "No data"}
             </p>

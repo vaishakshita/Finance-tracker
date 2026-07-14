@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import EmptyPlanner from './components/EmptyPlanner'
 import SummaryCards from './components/SummaryCards'
 import GoalSection from './components/GoalSection'
 import GoalModal from './components/GoalModal'
@@ -87,24 +88,24 @@ const page = () => {
     }
   }
 
-  const handleDeleteBudget = async(budgetId)=>{
-    try{
+  const handleDeleteBudget = async (budgetId) => {
+    try {
       const token = localStorage.getItem("token")
-      const res = await fetch(`http://localhost:5000/api/budget/${budgetId}`,{
+      const res = await fetch(`http://localhost:5000/api/budget/${budgetId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         }
       })
 
-      if(!res.ok){
+      if (!res.ok) {
         throw new Error("Failed to delete budget")
       }
 
       fetchBudgets()
       setSelectedBudget(null)
       setShowDeleteBudgetModal(false)
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   }
@@ -119,27 +120,40 @@ const page = () => {
 
   const activeGoals = goals.length
 
-  return (
-    
-      <div className='px-6'>
-        <h1 className='text-4xl font-bold text-purple-900 mb-8'>Financial Planner</h1>
-        <SummaryCards totalSaved={totalSaved} totalTarget={totalTarget} activeGoals={activeGoals} />
-
-        <GoalSection goals={goals} setShowGoalModal={setShowGoalModal} setEditingGoal={setEditingGoal} setShowDeleteModal={setShowDeleteModal} setSelectedGoal={setSelectedGoal} setShowSavingsModal={setShowSavingsModal} setSelectedGoalForSavings={setSelectedGoalForSavings} />
-
-        {showGoalModal && <GoalModal setShowGoalModal={setShowGoalModal} fetchGoals={fetchGoals} editingGoal={editingGoal} setEditingGoal={setEditingGoal} />}
-
-        {showDeleteModal && <DeleteGoalModal setShowDeleteModal={setShowDeleteModal} handleDelete={handleDelete} goalId={selectedGoal?._id} goalTitle={selectedGoal?.title} setSelectedGoal={setSelectedGoal} />}
-
-        {showSavingsModal && <AddSavingsmodal setShowSavingModal={setShowSavingsModal} selectedGoalForSavings={selectedGoalForSavings} fetchGoals={fetchGoals} />}
-
-        <BudgetSection budgets={budgets} setShowBudgetModal={setShowBudgetModal} setEditingBudget={setEditingBudget} setShowDeleteBudgetModal={setShowDeleteBudgetModal} setSelectedBudget={setSelectedBudget}/>
-
-        {showBudgetModal && <BudgetModel setShowBudgetModal={setShowBudgetModal} fetchBudgets={fetchBudgets} editingBudget={editingBudget} setEditingBudget={setEditingBudget}/>}
-
-        {showDeleteBudgetModal && (<DeleteBudgetModal setShowDeleteBudgetModal={setShowDeleteBudgetModal} handleDeleteBudget={handleDeleteBudget} budgetId={selectedBudget?._id} budgetCategory={selectedBudget?.category} setSelectedBudget={setSelectedBudget}/>)}
-        
+  if (loading) {
+    return (
+      <div className="p-6 text-center text-gray-500">
+        Loading...
       </div>
+    );
+  }
+
+  return (
+
+    <div className='px-6'>
+      {goals.length === 0 && budgets.length === 0 ? (<EmptyPlanner onAddGoal={() => setShowGoalModal} onAddBudget={() => setShowBudgetModal} />) : (
+        <>
+          <h1 className='text-4xl font-bold text-purple-900 mb-8'>Financial Planner</h1>
+          <SummaryCards totalSaved={totalSaved} totalTarget={totalTarget} activeGoals={activeGoals} />
+
+          <GoalSection goals={goals} setShowGoalModal={setShowGoalModal} setEditingGoal={setEditingGoal} setShowDeleteModal={setShowDeleteModal} setSelectedGoal={setSelectedGoal} setShowSavingsModal={setShowSavingsModal} setSelectedGoalForSavings={setSelectedGoalForSavings} />
+
+          <BudgetSection budgets={budgets} setShowBudgetModal={setShowBudgetModal} setEditingBudget={setEditingBudget} setShowDeleteBudgetModal={setShowDeleteBudgetModal} setSelectedBudget={setSelectedBudget} />
+        </>
+      )}
+
+
+      {showGoalModal && <GoalModal setShowGoalModal={setShowGoalModal} fetchGoals={fetchGoals} editingGoal={editingGoal} setEditingGoal={setEditingGoal} />}
+
+      {showDeleteModal && <DeleteGoalModal setShowDeleteModal={setShowDeleteModal} handleDelete={handleDelete} goalId={selectedGoal?._id} goalTitle={selectedGoal?.title} setSelectedGoal={setSelectedGoal} />}
+
+      {showSavingsModal && <AddSavingsmodal setShowSavingModal={setShowSavingsModal} selectedGoalForSavings={selectedGoalForSavings} fetchGoals={fetchGoals} />}
+
+      {showBudgetModal && <BudgetModel setShowBudgetModal={setShowBudgetModal} fetchBudgets={fetchBudgets} editingBudget={editingBudget} setEditingBudget={setEditingBudget} />}
+
+      {showDeleteBudgetModal && (<DeleteBudgetModal setShowDeleteBudgetModal={setShowDeleteBudgetModal} handleDeleteBudget={handleDeleteBudget} budgetId={selectedBudget?._id} budgetCategory={selectedBudget?.category} setSelectedBudget={setSelectedBudget} />)}
+
+    </div>
 
   )
 }

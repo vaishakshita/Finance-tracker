@@ -2,10 +2,11 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import EmptyDashboard from './dashboardComponents/EmptyDashboard'
 import ProfileMenu from "@/app/components/ProfileMenu"
 import BudgetOverview from './dashboardComponents/BudgetOverview'
 import RecentTransaction from './dashboardComponents/RecentTransaction'
-import SummaryCards from './dashboardComponents/MoneyCrads'
+import SummaryCards from './dashboardComponents/MoneyCards'
 
 
 const page = () => {
@@ -96,37 +97,45 @@ const page = () => {
     return <div>Loading or Invalid Data...</div>
   }
 
+  const isNewUser = transactions.length === 0 && budgets.length === 0;
+
   return (
     <>
-      <div className='ml-0 md:ml-10 py-3 px-5 md:p-2 max-w-6xl mx-auto'>
-        {/* Top Bar */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-semibold text-slate-800">
-            Welcome {user?.name}!
-          </h1>
-
+      {isNewUser ? (
+        <EmptyDashboard />
+      ) : (
+        <div className='ml-0 md:ml-10 py-3 px-5 md:p-2 max-w-6xl mx-auto'>
+          {/* Top Bar */}
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-4xl font-semibold text-slate-800">
+              Welcome back, {user?.name}!
+            </h1>
+          
           {/* Profile */}
-          <ProfileMenu user={user} />
-        </div>
+            <ProfileMenu user={user} />
+          </div>
+          <p className="text-gray-600 text-xl font-sans mx-auto">Let's take a look at your finances today.</p>
 
-        {/* Cards */}
-        <div>
-          <SummaryCards transactions={transactions} />
-        </div>
-
-        <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 mt-8'>
-          {/* budget */}
+          {/* Cards */}
           <div>
-            <BudgetOverview budgets={budgets} />
+            <SummaryCards transactions={transactions} />
           </div>
 
-          {/* Transactions */}
-          <div className="lg:col-span-2">
-            <RecentTransaction transactions={transactions} />
-          </div>
+          <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 mt-8'>
+            {/* budget */}
+            <div>
+              <BudgetOverview budgets={budgets} />
+            </div>
 
+            {/* Transactions */}
+            <div className="lg:col-span-2">
+              <RecentTransaction transactions={transactions} />
+            </div>
+
+          </div>
         </div>
-      </div>
+      )}
+
     </>
   )
 }
