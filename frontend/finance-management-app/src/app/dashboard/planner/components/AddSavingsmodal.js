@@ -1,10 +1,14 @@
 "use client"
 import React, { useState } from 'react'
+import ButtonLoader from '@/app/components/loading/ButtonLoader'
 
 const AddSavingsmodal = ({ setShowSavingModal, selectedGoalForSavings, fetchGoals }) => {
     const [amount, setAmount] = useState("")
+    const [loading, setLoading] = useState(false)
+
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setLoading(true);
         try {
             if (Number(amount) <= 0) {
                 return;
@@ -29,6 +33,8 @@ const AddSavingsmodal = ({ setShowSavingModal, selectedGoalForSavings, fetchGoal
             setShowSavingModal(false)
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false);
         }
     }
     return (
@@ -40,8 +46,15 @@ const AddSavingsmodal = ({ setShowSavingModal, selectedGoalForSavings, fetchGoal
                     <label className='font-medium'>Amount</label>
                     <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full mt-2 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-300" />
                     <div className="flex justify-end gap-3 mt-8">
-                        <button type='button' onClick={() => {setAmount(""); setShowSavingModal(false)}} className="px-5 py-2 border rounded-lg">Cancel</button>
-                        <button type='submit' className="px-5 py-2 bg-purple-700 text-white rounded-lg">Add Savings</button>
+                        <button type='button' disabled={loading} onClick={() => { setAmount(""); setShowSavingModal(false) }} className={`px-5 py-2 border rounded-lg transition ${loading
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:bg-gray-100"
+                            }`}>Cancel</button>
+
+                        <button type='submit' disabled={loading} className={`px-5 py-2 text-white rounded-lg ${loading
+                            ? "bg-purple-400 cursor-not-allowed"
+                            : "bg-purple-700 hover:bg-purple-800"
+                            }`}>{loading ? (<ButtonLoader text="Adding..." />) : ("Add Savings")}</button>
                     </div>
                 </form>
 

@@ -2,6 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Navbar from '../components/Navbar'
+import ButtonLoader from '@/app/components/loading/ButtonLoader'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -14,12 +15,14 @@ const page = () => {
   const [confirmpassword, setConfirmpassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
-    const res = await fetch("http://localhost:5000/api/auth/signup", {
+    setLoading(true);
+    try{
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -36,12 +39,18 @@ const page = () => {
       toast.error("Passwords do not match");
       return;
     }
-    if (res.ok) {
-      toast.success("Account Created Successfully");
-      router.push("/login")
-    } else {
-      toast.error(data.message);
+    if (!res.ok) {
+      toast.error(data.message || "Signup failed");
+    } 
+    toast.success("Account Created Successfully");
+    router.push("/login")
+    } catch(error){
+      console.log(error);
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false);
     }
+    
   }
 
   const inputDesign = "border-2 border-gray-400 hover:border-purple-400 focus:border-purple-600 outline-none focus:ring-1 focus:ring-purple-300 rounded-xl text-sm sm:text-xl";
@@ -73,7 +82,10 @@ const page = () => {
 
         </div>
         <div className='flex justify-center items-center mt-7'>
-          <button type='submit' className='text-xl h-14 w-28 rounded-4xl bg-purple-800 text-white hover:scale-105 transition'>Sign up</button>
+          <button type='submit' disabled={loading} className={`text-xl h-14 w-40 rounded-4xl text-white transition flex items-center justify-center${loading
+              ? "bg-purple-500 cursor-not-allowed"
+              : "bg-purple-800 hover:scale-105"
+            }`}>{loading ? <ButtonLoader text="Signing up..." /> : "Signup"}</button>
         </div>
         <p className='flex flex-col md:flex-row gap-3 justify-center items-center text-xl py-10 lg:text-2xl'>
           Already have an account?{' '}

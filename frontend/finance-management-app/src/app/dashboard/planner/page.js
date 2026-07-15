@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import PlannerSkeleton from '@/app/components/loading/PlannerSkeleton'
 import EmptyPlanner from './components/EmptyPlanner'
 import SummaryCards from './components/SummaryCards'
 import GoalSection from './components/GoalSection'
@@ -27,8 +28,9 @@ const page = () => {
 
 
   const fetchGoals = async () => {
+    const token = localStorage.getItem("token")
     try {
-      const token = localStorage.getItem("token")
+
       const res = await fetch("http://localhost:5000/api/goals", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,14 +41,13 @@ const page = () => {
       setGoals(data);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
+      throw error;
     }
   }
 
   const fetchBudgets = async () => {
+    const token = localStorage.getItem("token")
     try {
-      const token = localStorage.getItem("token")
       const res = await fetch("http://localhost:5000/api/budget", {
         headers: {
           Authorization: `Bearer ${token}`
@@ -59,18 +60,32 @@ const page = () => {
       const data = await res.json()
       setBudgets(data)
     } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
+      console.log(error);
+      throw error;
     }
   }
 
   useEffect(() => {
-    fetchGoals();
-    fetchBudgets();
-  }, [])
+    const loadPlanner = async () => {
+      setLoading(true);
+
+      try {
+        await Promise.all([
+          fetchGoals(),
+          fetchBudgets(),
+        ]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPlanner();
+  }, []);
 
   const handleDelete = async (id) => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
 
@@ -85,10 +100,13 @@ const page = () => {
       setSelectedGoal(null)
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
   const handleDeleteBudget = async (budgetId) => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token")
       const res = await fetch(`http://localhost:5000/api/budget/${budgetId}`, {
@@ -107,6 +125,8 @@ const page = () => {
       setShowDeleteBudgetModal(false)
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -121,11 +141,7 @@ const page = () => {
   const activeGoals = goals.length
 
   if (loading) {
-    return (
-      <div className="p-6 text-center text-gray-500">
-        Loading...
-      </div>
-    );
+    return <PlannerSkeleton />;
   }
 
   return (
@@ -145,13 +161,13 @@ const page = () => {
 
       {showGoalModal && <GoalModal setShowGoalModal={setShowGoalModal} fetchGoals={fetchGoals} editingGoal={editingGoal} setEditingGoal={setEditingGoal} />}
 
-      {showDeleteModal && <DeleteGoalModal setShowDeleteModal={setShowDeleteModal} handleDelete={handleDelete} goalId={selectedGoal?._id} goalTitle={selectedGoal?.title} setSelectedGoal={setSelectedGoal} />}
+      {showDeleteModal && <DeleteGoalModal loading={loading} setShowDeleteModal={setShowDeleteModal} handleDelete={handleDelete} goalId={selectedGoal?._id} goalTitle={selectedGoal?.title} setSelectedGoal={setSelectedGoal} />}
 
       {showSavingsModal && <AddSavingsmodal setShowSavingModal={setShowSavingsModal} selectedGoalForSavings={selectedGoalForSavings} fetchGoals={fetchGoals} />}
 
       {showBudgetModal && <BudgetModel setShowBudgetModal={setShowBudgetModal} fetchBudgets={fetchBudgets} editingBudget={editingBudget} setEditingBudget={setEditingBudget} />}
 
-      {showDeleteBudgetModal && (<DeleteBudgetModal setShowDeleteBudgetModal={setShowDeleteBudgetModal} handleDeleteBudget={handleDeleteBudget} budgetId={selectedBudget?._id} budgetCategory={selectedBudget?.category} setSelectedBudget={setSelectedBudget} />)}
+      {showDeleteBudgetModal && (<DeleteBudgetModal loading={loading} setShowDeleteBudgetModal={setShowDeleteBudgetModal} handleDeleteBudget={handleDeleteBudget} budgetId={selectedBudget?._id} budgetCategory={selectedBudget?.category} setSelectedBudget={setSelectedBudget} />)}
 
     </div>
 

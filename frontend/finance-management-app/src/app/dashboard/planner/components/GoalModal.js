@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import ButtonLoader from '@/app/components/loading/ButtonLoader';
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast';
 
@@ -8,6 +9,7 @@ const GoalModal = ({ setShowGoalModal, fetchGoals, editingGoal, setEditingGoal }
     const [targetAmount, setTargetAmount] = useState("")
     const [savedAmount, setSavedAmount] = useState("")
     const [deadline, setDeadline] = useState("")
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (editingGoal) {
@@ -25,7 +27,7 @@ const GoalModal = ({ setShowGoalModal, fetchGoals, editingGoal, setEditingGoal }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setLoading(true);
         try {
             if (Number(targetAmount) < Number(savedAmount)) {
                 toast.error("Target amount cannot be less than saved amount.");
@@ -64,6 +66,8 @@ const GoalModal = ({ setShowGoalModal, fetchGoals, editingGoal, setEditingGoal }
             setShowGoalModal(false);
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
     return (
@@ -85,8 +89,21 @@ const GoalModal = ({ setShowGoalModal, fetchGoals, editingGoal, setEditingGoal }
                     <input type="date" value={deadline} className="w-full mt-2 mb-5 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-600" onChange={(e) => setDeadline(e.target.value)} required />
 
                     <div className='flex justify-end gap-3 mt-8'>
-                        <button type='button' onClick={() => { setEditingGoal(null); setTitle(""); setTargetAmount(""); setSavedAmount(""); setDeadline(""); setShowGoalModal(false) }} className="px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">Cancel</button>
-                        <button type='submit' className="px-5 py-2 rounded-lg bg-purple-700 text-white hover:bg-purple-800 transition">{editingGoal ? "Update Goal" : "Create Goal"}</button>
+                        <button type='button' disabled={loading} onClick={() => { setEditingGoal(null); setTitle(""); setTargetAmount(""); setSavedAmount(""); setDeadline(""); setShowGoalModal(false) }} className={`px-5 py-2 rounded-lg border border-gray-300 transition ${loading
+                            ? "cursor-not-allowed opacity-50"
+                            : "hover:bg-gray-100"
+                            }`}>Cancel</button>
+
+                        <button type='submit' disabled={loading} className={`px-5 py-2 rounded-lg text-white transition ${loading
+                            ? "bg-purple-400 cursor-not-allowed"
+                            : "bg-purple-600 hover:bg-purple-700"
+                            }`}>{loading ? (
+                                <ButtonLoader
+                                    text={editingGoal ? "Updating..." : "Creating..."}
+                                />
+                            ) : (
+                                editingGoal ? "Update Goal" : "Create Goal"
+                            )}</button>
                     </div>
                 </form>
             </div>

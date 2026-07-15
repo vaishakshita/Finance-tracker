@@ -2,6 +2,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import DashboardSkeleton from '@/app/components/loading/DashboardSkeleton'
 import EmptyDashboard from './dashboardComponents/EmptyDashboard'
 import ProfileMenu from "@/app/components/ProfileMenu"
 import BudgetOverview from './dashboardComponents/BudgetOverview'
@@ -14,88 +15,109 @@ const page = () => {
   const [user, setUser] = useState(null)
   const [transactions, setTransactions] = useState([])
   const [budgets, setBudgets] = useState([])
+  const [loading, setLoading] = useState(true)
 
   //fetch user
-  useEffect(() => {
+  const fetchUser = async () => { //user data
     const token = localStorage.getItem("token")
-    if (!token) {
-      router.push("/login")
-      return
-    }
-
-    const fetchUser = async () => { //user data
-      const res = await fetch("http://localhost:5000/api/auth/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const data = await res.json()
-
-      if (res.ok) {
-        setUser(data.user)
-      } else {
-        router.push("/login")
+    const res = await fetch("http://localhost:5000/api/auth/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    };
+    })
+    const data = await res.json()
 
-    fetchUser()
-  }, [])
+    if (!res.ok) {
+      router.push("/login")
+      return;
+    }
+    setUser(data.user);
+  }
 
 
   //fetch transaction
-  useEffect(() => {
-    const fetchTransaction = async () => {
-      try {
-        const token = localStorage.getItem("token")
-        const res = await fetch("http://localhost:5000/api/transactions", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+  const fetchTransaction = async () => {
+    const token = localStorage.getItem("token");
 
-        const data = await res.json();
-        setTransactions(Array.isArray(data)
-          ? data
-          : Array.isArray(data?.transactions)
-            ? data.transactions
-            : [])
-        setLastUpdated(new Date().toLocaleString())
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    const res = await fetch("http://localhost:5000/api/transactions", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    fetchTransaction()
-  }, [])
+    const data = await res.json();
+
+    setTransactions(
+      Array.isArray(data)
+        ? data
+        : Array.isArray(data?.transactions)
+          ? data.transactions
+          : []
+    );
+
+    setLastUpdated(new Date().toLocaleString());
+  };
 
 
   //fetch budgets
+  const fetchBudgets = async () => {
+    const token = localStorage.getItem("token");
+    const res = await fetch("http://localhost:5000/api/budget", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    setBudgets(Array.isArray(data) ? data : [])
+  };
+
   useEffect(() => {
-    const fetchBudgets = async () => {
+
+    const loadDashboard = async () => {
+
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      setLoading(true);
+
       try {
-        const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5000/api/budget", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await Promise.all([
+          fetchUser(),
+          fetchTransaction(),
+          fetchBudgets()
+        ]);
 
-        const data = await res.json();
+      }
 
-        setBudgets(Array.isArray(data) ? data : []);
-      } catch (error) {
+      catch (error) {
         console.log(error);
       }
+
+      finally {
+        setLoading(false);
+      }
+
     };
 
-    fetchBudgets();
+    loadDashboard();
+
   }, []);
 
   if (!Array.isArray(transactions)) {
     return <div>Loading or Invalid Data...</div>
   }
+
+  if(loading){
+    return <DashboardSkeleton/>
+}
 
   const isNewUser = transactions.length === 0 && budgets.length === 0;
 
@@ -110,8 +132,8 @@ const page = () => {
             <h1 className="text-4xl font-semibold text-slate-800">
               Welcome back, {user?.name}!
             </h1>
-          
-          {/* Profile */}
+
+            {/* Profile */}
             <ProfileMenu user={user} />
           </div>
           <p className="text-gray-600 text-xl font-sans mx-auto">Let's take a look at your finances today.</p>

@@ -10,6 +10,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 import ProfileMenu from '@/app/components/ProfileMenu'
+import TransactionSkeleton from '@/app/components/loading/TransactionSkeleton';
 import EmptyTransaction from './components/EmptyTransaction';
 import AddTransactionModal from '@/app/dashboard/transactions/components/AddTransactionModal'
 import DeleteModal from '@/app/dashboard/transactions/components/DeleteModal';
@@ -19,6 +20,7 @@ import toast from 'react-hot-toast';
 
 const page = () => {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const [user, setUser] = useState(null)
   const [search, setSearch] = useState("")
   const [transactions, setTransactions] = useState([])
@@ -54,14 +56,8 @@ const page = () => {
 
 
   //fetch user info
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (!token) {
-      router.push("/login")
-      return
-    }
-
     const fetchUser = async () => {
+      const token = localStorage.getItem("token")
       const res = await fetch("http://localhost:5000/api/auth/me", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -74,12 +70,10 @@ const page = () => {
         router.push("/login")
       }
     }
-    fetchUser()
-  }, [])
+    
 
   //fetch transcation
-  const fetchTansaction = async () => {
-    try {
+  const fetchTransaction = async () => {
       const token = localStorage.getItem("token")
       const res = await fetch("http://localhost:5000/api/transactions", {
         headers: {
@@ -96,17 +90,37 @@ const page = () => {
 
       setTransactions(fetchedTransactions)
       setDisplayTransaction(fetchedTransactions)
-    } catch (error) {
-      console.log(error)
-    }
   };
 
   useEffect(() => {
-    fetchTansaction()
-  }, [])
+  const loadTransactionsPage = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await Promise.all([
+        fetchUser(),
+        fetchTransaction(),
+      ]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadTransactionsPage();
+}, [router]);
 
   // Add transaction
   const handleAddTransaction = async (e) => {
+    setLoading(true)
     try {
       const token = localStorage.getItem("token")
       console.log(formData)
@@ -149,28 +163,40 @@ const page = () => {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
   // Edit transaction
   const handleEdit = (transaction) => {
-    setIsEditing(true);
-    setSelectedTransaction(transaction);
+    setLoading(true);
+    try {
+      setIsEditing(true);
+      setSelectedTransaction(transaction);
 
-    setFormData({
-      title: transaction.title,
-      amount: transaction.amount,
-      category: transaction.category,
-      type: transaction.type,
-      date: transaction.date
-        ? transaction.date.slice(0, 10)
-        : "",
-    })
-    setShowModal(true)
+      setFormData({
+        title: transaction.title,
+        amount: transaction.amount,
+        category: transaction.category,
+        type: transaction.type,
+        date: transaction.date
+          ? transaction.date.slice(0, 10)
+          : "",
+      })
+      setShowModal(true)
+    } catch(error){
+      console.log(error)
+    }
+
+    finally {
+      setLoading(false)
+    }
   }
 
   //delete transaction
   const handleDeleteTransaction = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token")
       const res = await fetch(`http://localhost:5000/api/transactions/${selectedTransaction._id}`, {
@@ -191,6 +217,8 @@ const page = () => {
       }
     } catch (error) {
       console.log(error)
+    } finally{
+      setLoading(false);
     }
   }
 
@@ -271,6 +299,9 @@ const page = () => {
 
 
   const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
+  if (loading) {
+  return <TransactionSkeleton />;
+}
 
   return (
     <>
@@ -378,11 +409,11 @@ const page = () => {
 
       {/* Modal form */}
 
-      <AddTransactionModal transactions={transactions} showModal={showModal} setShowModal={setShowModal} formData={formData} setFormData={setFormData} handleAddTransaction={handleAddTransaction} handleAdd={handleAdd} isEditing={isEditing} selectedTransaction={selectedTransaction} />
+      <AddTransactionModal loading={loading} transactions={transactions} showModal={showModal} setShowModal={setShowModal} formData={formData} setFormData={setFormData} handleAddTransaction={handleAddTransaction} isEditing={isEditing} selectedTransaction={selectedTransaction} />
 
       <FilterModal showFilter={showFilter} setShowFilter={setShowFilter} cardFilters={cardFilters} setCardFilters={setCardFilters} applyFilters={applyFilters} />
 
-      <DeleteModal showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} handleDeleteTransaction={handleDeleteTransaction} />
+      <DeleteModal loading={loading} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} handleDeleteTransaction={handleDeleteTransaction} />
     </>
   )
 }

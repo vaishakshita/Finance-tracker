@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Baloo_Bhai_2 } from 'next/font/google';
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -11,11 +10,6 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-});
-
-const baloo = Baloo_Bhai_2({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
 });
 
 export const metadata = {

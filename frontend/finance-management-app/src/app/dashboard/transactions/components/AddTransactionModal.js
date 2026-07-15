@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import ButtonLoader from '@/app/components/loading/ButtonLoader'
 
 const addTransactionModal = ({
     showModal,
@@ -7,7 +8,7 @@ const addTransactionModal = ({
     formData,
     setFormData,
     handleAddTransaction,
-    handleAdd,
+    loading,
     isEditing,
 }) => {
     const modalDesign = "w-full border-2 border-blue-300 rounded-lg p-1 mb-4"
@@ -47,8 +48,21 @@ const addTransactionModal = ({
                             } className={modalDesign} />
 
                         <div className='flex justify-end gap-3'>
-                            <button onClick={() => setShowModal(false)} className='px-4 py-2 rounded-lg border-2 border-blue-700 text-blue-900'>Cancel</button>
-                            <button onClick={handleAddTransaction} className='bg-indigo-600 text-white px-5 py-2 rounded-lg'>{isEditing ? "Update" : "Add"}</button>
+                            <button onClick={() => setShowModal(false)} disabled={loading} className={`px-4 py-2 rounded-lg border-2 border-blue-700 text-blue-900 ${loading
+                                ? "cursor-not-allowed opacity-50"
+                                : "hover:bg-gray-100"
+                                }`}>Cancel</button>
+
+                            <button onClick={handleAddTransaction} disabled={loading} className={`px-5 py-2 rounded-lg text-white transition flex items-center justify-center min-w-[120px] ${loading
+                                ? "bg-indigo-400 cursor-not-allowed"
+                                : "bg-indigo-600 hover:bg-indigo-700"
+                                }`}>{loading ? (
+                                    <ButtonLoader
+                                        text={isEditing ? "Updating..." : "Adding..."}
+                                    />
+                                ) : (
+                                    isEditing ? "Update" : "Add"
+                                )}</button>
                         </div>
                     </div>
                 </div>

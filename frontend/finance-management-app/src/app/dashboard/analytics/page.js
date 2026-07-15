@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react'
+import AnalyticsSkeleton from '@/app/components/loading/AnalyticsSkeleton';
 import EmptyAnalytics from './components/EmptyAnalytics';
 import ExpensePieChart from "@/app/dashboard/analytics/components/ExpensePieChart";
 import IncomeExpenseChart from '@/app/dashboard/analytics/components/IncomeExpenseChart';
@@ -8,10 +9,12 @@ import FinancialInsights from '@/app/dashboard/analytics/components/FinancialIns
 
 const page = () => {
   const [transactions, setTransactions] = useState([])
+  const [loading, setLoading] = useState(true)
   const latestTransaction = transactions[0];
 
   const fetchTransaction = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
 
       const res = await fetch("http://localhost:5000/api/transactions", {
@@ -25,6 +28,8 @@ const page = () => {
       setTransactions(Array.isArray(data) ? data : []);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -36,12 +41,14 @@ const page = () => {
 
   const income = transactions.filter(t => t.type === "income").reduce((acc, t) => acc + t.amount, 0);
   const expense = transactions.filter(t => t.type === "expense").reduce((acc, t) => acc + t.amount, 0);
-
+  if (loading) {
+    return <AnalyticsSkeleton />;
+  }
   return (
     <>
       {
         transactions.length === 0 ? (
-          <EmptyAnalytics/>
+          <EmptyAnalytics />
         ) : (
           <div className='p-6 pb-24'>
             <h1 className='text-2xl md:text-3xl font-bold font-sans text-purple-800'>Compare your monthly spending</h1>

@@ -1,6 +1,7 @@
 "use client"
 import React from 'react'
 import Link from 'next/link'
+import ButtonLoader from '@/app/components/loading/ButtonLoader'
 import Navbar from '../components/Navbar'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -11,29 +12,38 @@ const page = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        password
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        })
       })
-    })
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      localStorage.setItem("token", data.token)
-      router.push("/dashboard")
+      if (!res.ok) {
+        toast.error(data.message || "Login failed")
+      }
+      localStorage.setItem("token", data.token);
       toast.success("Login Successful");
-    } else {
-      toast.error(data.message)
+      router.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -54,7 +64,10 @@ const page = () => {
           </div>
         </div>
         <div className='flex justify-center items-center mt-7'>
-          <button type='submit' className='text-xl h-14 w-28 rounded-4xl bg-purple-800 text-white hover:scale-105 transition'>Login</button>
+          <button type='submit' disabled={loading} className={`text-xl h-14 w-40 rounded-4xl text-white transition flex items-center justify-center${loading
+              ? "bg-purple-500 cursor-not-allowed"
+              : "bg-purple-800 hover:scale-105"
+            }`}>{loading ? <ButtonLoader text="Logging in..." /> : "Login"}</button>
         </div>
         <p className='flex flex-col md:flex-row gap-3 justify-center items-center text-xl py-10 lg:text-2xl'>
           Don't have an account?{' '}
