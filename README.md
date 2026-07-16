@@ -305,13 +305,20 @@ Render
 Database:
 MongoDB Atlas
 
+## Live Demo
+
+Frontend:
+https://montera-self.vercel.app/
+
+Backend:
+https://montera-backend.onrender.com/
+
 ## Future Enhancements
 
 - AI - powered monthly financial summaries.
 - Smart spending recommendations
 - Export transaction as CSV/PDF
 - Dark mode support
-- Deployment on Vercel
 
 ## Author
 
