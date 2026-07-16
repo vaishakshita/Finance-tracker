@@ -58,7 +58,7 @@ const page = () => {
   //fetch user info
     const fetchUser = async () => {
       const token = localStorage.getItem("token")
-      const res = await fetch("http://localhost:5000/api/auth/me", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -72,10 +72,10 @@ const page = () => {
     }
     
 
-  //fetch transcation
+  //fetch transaction
   const fetchTransaction = async () => {
       const token = localStorage.getItem("token")
-      const res = await fetch("http://localhost:5000/api/transactions", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -126,8 +126,8 @@ const page = () => {
       console.log(formData)
 
       const url = isEditing
-        ? `http://localhost:5000/api/transactions/${selectedTransaction._id}`
-        : "http://localhost:5000/api/transactions";
+        ? `${process.env.NEXT_PUBLIC_API_URL}/api/transactions/${selectedTransaction._id}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/api/transactions`;
 
       const method = isEditing ? "PUT" : "POST";
       console.log(formData);
@@ -157,7 +157,7 @@ const page = () => {
 
         setIsEditing(false);
         setSelectedTransaction(null);
-        fetchTansaction();
+        await fetchTransaction();
       } else {
         toast.error(data.message);
       }
@@ -199,7 +199,7 @@ const page = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token")
-      const res = await fetch(`http://localhost:5000/api/transactions/${selectedTransaction._id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions/${selectedTransaction._id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`
@@ -211,7 +211,7 @@ const page = () => {
         toast.success("Transaction deleted successfully")
         setShowDeleteModal(false);
         setSelectedTransaction(null);
-        fetchTansaction();
+        await fetchTransaction();
       } else {
         toast.error(data.message)
       }
@@ -235,7 +235,7 @@ const page = () => {
     setShowModal(true);
   };
 
-  //apply filter to transcation
+  //apply filter to transaction
   const applyFilters = () => {
     let filtered = [...transactions]
     filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -322,7 +322,7 @@ const page = () => {
 
         {/* search */}
         {transactions.length !== 0 && <div className='relative w-full max-w-sm mx-auto md:ml-0'>
-          <input type="text" placeholder='Search transaction...' value={search} onChange={(e) => setSearch(e.target.value)} className='w-full border-2 border-blue-400 rounded-xl py-2 pl-4 pr-10 outline-none focus:border-blue-600' />
+          <input type="text" placeholder='Search transaction by title...' value={search} onChange={(e) => setSearch(e.target.value)} className='w-full border-2 border-blue-400 rounded-xl py-2 pl-4 pr-10 outline-none focus:border-blue-600' />
           <FiSearch size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600" />
         </div>}
 

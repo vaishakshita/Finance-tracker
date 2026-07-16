@@ -61,9 +61,9 @@ const ExpensePieChart = ({ transactions }) => {
 
     return (
         <div className="bg-white rounded-3xl shadow-xl p-5">
-            <div className="flex flex-row gap-5">
-                <h2 className="text-xl font-bold md:mb-5">Expense by Category</h2>
-            <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} className="border-2 border-indigo-800 bg-blue-100 p-3 rounded-lg -mt-2">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+                <h2 className="text-xl font-bold">Expense by Category</h2>
+            <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} className="w-full sm:w-40 border-2 border-indigo-800 bg-blue-100 p-3 rounded-lg">
                 <option value="All">All Time</option>
                 {monthNames.map((month) => (
                     <option key={month} value={month}>{month}</option>

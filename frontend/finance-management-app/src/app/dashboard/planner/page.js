@@ -10,6 +10,7 @@ import AddSavingsmodal from './components/AddSavingsmodal'
 import BudgetSection from './components/BudgetSection'
 import BudgetModel from './components/BudgetModel'
 import DeleteBudgetModal from './components/DeleteBudgetModal'
+import toast from 'react-hot-toast';
 
 const page = () => {
   const [goals, setGoals] = useState([])
@@ -31,7 +32,7 @@ const page = () => {
     const token = localStorage.getItem("token")
     try {
 
-      const res = await fetch("http://localhost:5000/api/goals", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -48,7 +49,7 @@ const page = () => {
   const fetchBudgets = async () => {
     const token = localStorage.getItem("token")
     try {
-      const res = await fetch("http://localhost:5000/api/budget", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/budget`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -89,13 +90,14 @@ const page = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await fetch(`http://localhost:5000/api/goals/${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
-      fetchGoals()
+      await fetchGoals()
+      toast.success("Goal deleted successfully")
       setShowDeleteModal(false)
       setSelectedGoal(null)
     } catch (error) {
@@ -109,7 +111,7 @@ const page = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token")
-      const res = await fetch(`http://localhost:5000/api/budget/${budgetId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/budget/${budgetId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -120,7 +122,8 @@ const page = () => {
         throw new Error("Failed to delete budget")
       }
 
-      fetchBudgets()
+      await fetchBudgets()
+      toast.success("Budget deleted successfully")
       setSelectedBudget(null)
       setShowDeleteBudgetModal(false)
     } catch (error) {

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import ButtonLoader from '@/app/components/loading/ButtonLoader'
+import toast from 'react-hot-toast'
 
 const AddSavingsmodal = ({ setShowSavingModal, selectedGoalForSavings, fetchGoals }) => {
     const [amount, setAmount] = useState("")
@@ -14,7 +15,7 @@ const AddSavingsmodal = ({ setShowSavingModal, selectedGoalForSavings, fetchGoal
                 return;
             }
             const token = localStorage.getItem("token")
-            const res = await fetch(`http://localhost:5000/api/goals/${selectedGoalForSavings._id}/add-savings`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals/${selectedGoalForSavings._id}/add-savings`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -26,19 +27,21 @@ const AddSavingsmodal = ({ setShowSavingModal, selectedGoalForSavings, fetchGoal
             })
 
             if (!res.ok) {
-                throw new Error("Failed to add savings")
+                toast.error("Failed to add savings")
             }
             fetchGoals()
+            toast.success("Savings added successfully")
             setAmount("")
             setShowSavingModal(false)
         } catch (error) {
             console.log(error)
+            toast.error(data.message)
         } finally {
             setLoading(false);
         }
     }
     return (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center p-7 z-50">
             <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl">
                 <form onSubmit={handleSubmit}>
                     <h2 className="text-3xl font-bold text-purple-900">Add savings</h2>

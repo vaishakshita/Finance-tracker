@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import ButtonLoader from '@/app/components/loading/ButtonLoader';
 import { FaUtensils, FaShoppingCart, FaFilm, FaFileInvoiceDollar, FaShoppingBasket, FaPlaneDeparture, FaMoneyBillWave, FaQuestionCircle, } from "react-icons/fa";
+import toast from 'react-hot-toast';
 
 export const categoryIcons = {
   "Food and drinks": FaUtensils,
@@ -72,7 +73,7 @@ const BudgetModel = ({ setShowBudgetModal, fetchBudgets, editingBudget, setEditi
 
     try {
       const token = localStorage.getItem("token")
-      const url = editingBudget ? `http://localhost:5000/api/budget/${editingBudget._id}` : "http://localhost:5000/api/budget";
+      const url = editingBudget ? `${process.env.NEXT_PUBLIC_API_URL}/api/budget/${editingBudget._id}` : `${process.env.NEXT_PUBLIC_API_URL}/api/budget`;
 
       const method = editingBudget ? "PUT" : "POST"
       const res = await fetch(url, {
@@ -94,8 +95,8 @@ const BudgetModel = ({ setShowBudgetModal, fetchBudgets, editingBudget, setEditi
         throw new Error(editingBudget ? "Failed to update budget" : "Failed to create budget");
       }
 
-      fetchBudgets()
-
+      await fetchBudgets()
+      toast.success(editingBudget ? "Budget Updated successfully" : "Budget created successfully")
       setCategory("")
       setAmount("")
       setMonth(new Date().getMonth() + 1)
@@ -112,7 +113,7 @@ const BudgetModel = ({ setShowBudgetModal, fetchBudgets, editingBudget, setEditi
   }
 
   return (
-    <div className='fixed inset-0 bg-black/40 flex justify-center items-center z-50'>
+    <div className='fixed inset-0 bg-black/40 flex justify-center items-center p-5 z-50'>
       <div className='bg-white rounded-2xl p-8 w-full max-w-md shadow-xl'>
         <div className='mb-6'>
           <h2 className='text-3xl font-bold text-purple-900 mb-2'>{editingBudget ? "Edit Budget" : "Add New Budget"}</h2>

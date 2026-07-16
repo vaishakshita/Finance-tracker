@@ -20,7 +20,7 @@ const page = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -64,7 +64,7 @@ const page = () => {
           </div>
         </div>
         <div className='flex justify-center items-center mt-7'>
-          <button type='submit' disabled={loading} className={`text-xl h-14 w-40 rounded-4xl text-white transition flex items-center justify-center${loading
+          <button type='submit' disabled={loading} className={`text-xl h-14 w-40 rounded-4xl text-white transition flex items-center justify-center ${loading
               ? "bg-purple-500 cursor-not-allowed"
               : "bg-purple-800 hover:scale-105"
             }`}>{loading ? <ButtonLoader text="Logging in..." /> : "Login"}</button>

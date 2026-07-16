@@ -34,7 +34,7 @@ const GoalModal = ({ setShowGoalModal, fetchGoals, editingGoal, setEditingGoal }
                 return;
             }
             const token = localStorage.getItem("token")
-            const url = editingGoal ? `http://localhost:5000/api/goals/${editingGoal._id}` : "http://localhost:5000/api/goals";
+            const url = editingGoal ? `${process.env.NEXT_PUBLIC_API_URL}/api/goals/${editingGoal._id}` : `${process.env.NEXT_PUBLIC_API_URL}/api/goals`;
 
             const method = editingGoal ? "PUT" : "POST"
             const res = await fetch(url, {
@@ -57,7 +57,8 @@ const GoalModal = ({ setShowGoalModal, fetchGoals, editingGoal, setEditingGoal }
                 throw new Error(editingGoal ? "Failed to update goal" : "Failed to create goal");
             }
 
-            fetchGoals();
+            await fetchGoals();
+            toast.success(editingGoal ? "Goal updated successfully" : "Goal created successfully")
             setTitle("");
             setTargetAmount("");
             setSavedAmount("");
@@ -71,7 +72,7 @@ const GoalModal = ({ setShowGoalModal, fetchGoals, editingGoal, setEditingGoal }
         }
     }
     return (
-        <div className='fixed inset-0 bg-black/40 flex justify-center items-center z-50'>
+        <div className='fixed inset-0 p-7 bg-black/40 flex justify-center items-center z-50'>
             <div className='bg-white rounded-2xl p-8 w-full max-w-md shadow-xl'>
                 <h2 className='text-3xl font-bold text-purple-900 mb-2'>{editingGoal ? "Edit Goal" : "Add New Goal"}</h2>
                 <p className='text-gray-500 font-semibold mb-6'>{editingGoal ? "Update your savings goal details." : "Create a savings goal and track your progress over time."}</p>

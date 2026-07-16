@@ -3,7 +3,7 @@ import ButtonLoader from '@/app/components/loading/ButtonLoader'
 
 const DeleteBudgetModal = ({ loading, setShowDeleteBudgetModal, handleDeleteBudget, budgetId, budgetCategory, setSelectedBudget }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 p-5 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <h2 className="text-2xl font-bold text-red-600">Delete Budget</h2>
         <p className="mt-4 text-gray-600">Are you sure you want to delete

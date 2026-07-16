@@ -20,7 +20,7 @@ const page = () => {
   //fetch user
   const fetchUser = async () => { //user data
     const token = localStorage.getItem("token")
-    const res = await fetch("http://localhost:5000/api/auth/me", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -40,7 +40,7 @@ const page = () => {
   const fetchTransaction = async () => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/api/transactions", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -63,7 +63,7 @@ const page = () => {
   //fetch budgets
   const fetchBudgets = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/budget", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/budget`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

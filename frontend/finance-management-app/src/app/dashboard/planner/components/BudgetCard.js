@@ -50,13 +50,13 @@ const BudgetCard = ({ budget, onEdit, onDelete }) => {
     <div className="bg-white rounded-2xl shadow-md border border-purple-100 p-6 hover:shadow-xl transition mb-6">
 
       {/* header */}
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col md:flex-row gap-3 mb-2 items-center justify-between'>
         <div className='flex items-center gap-3'>
           <Icon className="text-purple-700 text-3xl" />
           <h2 className="text-2xl font-bold text-purple-900">{budget.category}</h2>
         </div>
         <span
-          className={`rounded-full px-4 py-1 text-sm font-semibold ${status.color}`}
+          className={`rounded-full px-3 py-1 mx-2 text-sm font-semibold ${status.color}`}
         >
           {status.text}
         </span>

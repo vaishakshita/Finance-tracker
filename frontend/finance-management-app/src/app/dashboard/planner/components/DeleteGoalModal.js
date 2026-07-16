@@ -4,7 +4,7 @@ import ButtonLoader from '@/app/components/loading/ButtonLoader'
 
 const DeleteGoalModal = ({loading,setShowDeleteModal, handleDelete, goalId, goalTitle, setSelectedGoal}) => {
   return (
-    <div className='fixed inset-0 bg-black/40 flex justify-center items-center z-50'>
+    <div className='fixed inset-0 p-5 bg-black/40 flex justify-center items-center z-50'>
       <div className='bg-white rounded-2xl w-full max-w-md p-8 shadow-xl'>
         <h2 className='text-2xl font-bold text-red-600'>Delete Goal</h2>
         <p className="mt-4 text-gray-600">Are you sure you want to delete</p>
