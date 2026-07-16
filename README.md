@@ -1,16 +1,48 @@
 # Montera - Personal Finance Tracker
 
-A full - stack finance management application that enables users to securely manage income, expense, savings, and financial insights through an intuitive dashboard.
+## Overview
+
+Montera is a modern full-stack personal finance management application designed to help users monitor their income, expenses, budgets, and financial goals in one place. It provides interactive analytics, personalized financial insights, goal tracking, and budget planning through an intuitive and responsive interface.
+
+The project was built to demonstrate full-stack development skills using the MERN ecosystem with secure authentication, RESTful APIs, data visualization, and responsive UI design.
 
 ## Features
 
-- User authentication using JWT
-- Dashboard with financial summary
-- Income and expense managemnt
-- Interactive analytics
-- Expense categorization
-- Responsive design
+### Authentication
+- Secure JWT-based authentication
 - Protected routes
+- User-specific financial data
+
+### Dashboard
+- Financial summary cards
+- Recent transactions
+- Budget overview
+- Quick navigation
+
+### Transaction Management
+- Add, edit, and delete transactions
+- Search transactions
+- Category filtering
+- Income & expense tracking
+
+### Analytics
+- Income vs Expense charts
+- Expense distribution (Pie Chart)
+- Spending trends
+- Financial insights
+
+### Financial Planner
+- Savings goals
+- Budget management
+- Goal progress tracking
+- Add savings to goals
+
+### User Experience
+- Responsive design
+- Loading skeletons
+- Button loading states
+- Empty states for new users
+- Toast notifications
 
 ## Tech Stack
 
@@ -49,6 +81,13 @@ Authentication
 
 ![Analytics](Screenshots/analyticsPageSecond.png)
 
+### Planner
+
+![Planner](Screenshots/goalSection.png)
+
+![Planner](Screenshots/budgetSection.png)
+
+
 
 ## Responsive design
 Montera is fully responsive and optimized for desktops, tablet and mobile devices
@@ -57,7 +96,7 @@ Montera is fully responsive and optimized for desktops, tablet and mobile device
 
 - Responsive sidebar navigation
 - Optimized card layout
-- Wide chart visulalization
+- Wide chart visualization
 
 ![Desktop Dashboard](Screenshots/dashboardPage.png)
 
@@ -65,9 +104,9 @@ Montera is fully responsive and optimized for desktops, tablet and mobile device
 
 ### Mobile Experience
 
-- Bottom naviigation for quick access
+- Bottom navigation for quick access
 - Mobile optimized dashboard
-- Responsive trabsaction cards
+- Responsive transaction cards
 - Adaptive analytics layout
 
 | Mobile Dashboard | Mobile Analytics |
@@ -75,7 +114,7 @@ Montera is fully responsive and optimized for desktops, tablet and mobile device
 | ![](Screenshots/mobileDashboard.png) | ![](Screenshots/mobileAnalytics.png) |
 
 
-## Project Sturcture
+## Project Structure
 
 ```text
 Finance-tracker/
@@ -91,7 +130,7 @@ Finance-tracker/
 |  └─package.json
 |
 ├─frontend/
-|  └─finance-mamagement-app/
+|  └─finance-management-app/
 |    ├─public/
 |    ├─src/
 |    | └─app/
@@ -136,7 +175,7 @@ cd Finance-tracker
 
 ```bash
 cd backend
-npn install
+npm install
 ```
 
 ### 3. Install Frontend Dependencies
@@ -158,8 +197,8 @@ PORT=5000
 
 Replace the placeholder values with:
 
-- **MONGO_URI** → Your MongoDb Atlas connectoon string
-- **JWT_SECRET** → Asecure random secret key used for signing JWTs.
+- **MONGO_URI** → Your MongoDB Atlas connection string
+- **JWT_SECRET** → A secure random secret key used for signing JWTs.
 - **PORT** → Backend server port (default: `5000`).
 
 ### 5. Start Backend Server
@@ -174,7 +213,7 @@ npm run dev
 Open new terminal
 
 ```bash
-cd frontend/finance-managemnt-app
+cd frontend/finance-management-app
 npm run dev
 ```
 
@@ -193,25 +232,81 @@ After starting both the frontend and backend servers:
 - View recent transactions on the dashboard.
 - Analyze spending patterns through interactive charts.
 - Filter analytics by month to gain financial insights.
-- Mange all transactions from the Transactions page.
+- Manage all transactions from the Transactions page.
 
 ## Authentication 
 
-Montera uses **JWT (JSON Web Token)** for secure user authnetication.
+Montera uses **JWT (JSON Web Token)** for secure user authentication.
 
-Authnetication flow
+Authentication flow
 
 1. User logs in with email and password.
 2. Password is verified using **bcrypt**.
-3. AJWT is generated upon successful authentication.
+3. A JWT is generated upon successful authentication.
 4. The token is stored in the browser for authenticated requests.
-5. Protected API rouets validates the token before granting access to user-specific resources.
+5. Protected API routes validate JWTs before granting access to user-specific resources.
 
 > **Note:** For simplicity, the current implementation stores JWT in localStorage. In a production environment, HttpOnly cookies are recommended for enhanced security.
 
+## REST API
+
+### Authentication
+POST /api/auth/signup
+
+POST /api/auth/login
+
+GET /api/auth/me
+
+### Transactions
+GET /api/transactions
+
+POST /api/transactions
+
+PUT /api/transactions/:id
+
+DELETE /api/transactions/:id
+
+### Goals
+GET /api/goals
+
+POST /api/goals
+
+PUT /api/goals/:id
+
+DELETE /api/goals/:id
+
+### Budgets
+GET /api/budget
+
+POST /api/budget
+
+PUT /api/budget/:id
+
+DELETE /api/budget/:id
+
+## Challenges
+
+Some key challenges while building Montera included:
+
+- Designing a responsive dashboard for desktop and mobile.
+- Managing user authentication securely using JWT.
+- Building reusable modal components.
+- Implementing loading states and skeleton screens.
+- Organizing the project into reusable components for scalability.
+
+## Deployment
+
+Frontend:
+Vercel
+
+Backend:
+Render
+
+Database:
+MongoDB Atlas
+
 ## Future Enhancements
 
-- Financial Planner (Budget & Goals)
 - AI - powered monthly financial summaries.
 - Smart spending recommendations
 - Export transaction as CSV/PDF
