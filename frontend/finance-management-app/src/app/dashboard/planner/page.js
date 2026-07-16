@@ -150,7 +150,7 @@ const page = () => {
   return (
 
     <div className='px-6'>
-      {goals.length === 0 && budgets.length === 0 ? (<EmptyPlanner onAddGoal={() => setShowGoalModal} onAddBudget={() => setShowBudgetModal} />) : (
+      {goals.length === 0 && budgets.length === 0 ? (<EmptyPlanner onAddGoal={() => setShowGoalModal(true)} onAddBudget={() => setShowBudgetModal(true)}/>) : (
         <>
           <h1 className='text-4xl font-bold text-purple-900 mb-8'>Financial Planner</h1>
           <SummaryCards totalSaved={totalSaved} totalTarget={totalTarget} activeGoals={activeGoals} />
