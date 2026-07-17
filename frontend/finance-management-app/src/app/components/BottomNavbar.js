@@ -1,5 +1,5 @@
 "use client";
-import ButtonLoader from "@/app/loading/ButtonLoader";
+import ButtonLoader from "./loading/ButtonLoader";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";

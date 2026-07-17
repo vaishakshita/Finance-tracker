@@ -1,5 +1,5 @@
 "use client"
-import ButtonLoader from "@/app/loading/ButtonLoader";
+import ButtonLoader from "./loading/ButtonLoader";
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation";
 import { FaUser, FaCog, FaQuestionCircle, FaSignOutAlt } from "react-icons/fa";
